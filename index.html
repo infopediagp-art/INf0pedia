@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Infopedia - Connecting People</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         /* Navigation Styles */
+
         .hamburger.open div:nth-child(1) {
             transform: translateY(8px) rotate(45deg);
         }
+
         .hamburger.open div:nth-child(2) {
             opacity: 0;
         }
+
         .hamburger.open div:nth-child(3) {
             transform: translateY(-8px) rotate(-45deg);
         }
+
         #menu-items {
             transition: all 0.3s ease;
         }
+
         #menu-items.active {
             display: flex;
             flex-direction: column;
@@ -32,33 +42,37 @@
             padding: 1rem;
             gap: 1rem;
         }
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
-        
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             overflow-x: hidden;
             color: white;
         }
-        
+
         .vanta-bg {
             min-height: 100vh;
             width: 100%;
             position: relative;
         }
-        
+
         .section {
             min-height: 100vh;
             padding: 4rem 2rem;
             position: relative;
             overflow: hidden;
+            scroll-margin-top: 60px;
         }
-        
+
         .card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -67,17 +81,17 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s, box-shadow 0.3s;
         }
-        
+
         .card:hover {
             transform: translateY(-10px);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
-        
+
         @media (max-width: 1024px) {
             .section {
                 padding: 3rem 1.5rem;
             }
-            
+
             .card {
                 padding: 1.5rem;
             }
@@ -88,7 +102,7 @@
                 padding: 2rem 1rem;
                 min-height: auto;
             }
-            
+
             .card {
                 padding: 1rem;
             }
@@ -104,48 +118,74 @@
                 gap: 1rem;
             }
 
-            .video-container iframe {
+            .video-container video {
                 max-height: 300px;
             }
         }
-        
+
+        /* Videos */
+
         .video-container {
             position: relative;
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             border-radius: 15px;
+            background: #000;
         }
-        
-        .video-container iframe {
+
+        .video-container video {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
         }
-        
+
+        /* No controls style */
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+        video::-webkit-media-controls-enclosure {
+            display: none !important;
+        }
+
         .flip-animation {
             animation: flip 5s ease-in-out infinite;
             transform-style: preserve-3d;
         }
-        
+
         @keyframes flip {
-            0% { transform: perspective(800px) rotateY(0deg); }
-            50% { transform: perspective(800px) rotateY(180deg); }
-            100% { transform: perspective(800px) rotateY(360deg); }
+            0% {
+                transform: perspective(800px) rotateY(0deg);
+            }
+            50% {
+                transform: perspective(800px) rotateY(180deg);
+            }
+            100% {
+                transform: perspective(800px) rotateY(360deg);
+            }
         }
 
         .floating {
             animation: floating 3s ease-in-out infinite;
         }
-        
+
         @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
         }
-        
+
         .pops {
             position: absolute;
             background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
@@ -154,7 +194,7 @@
             pointer-events: none;
             animation: pop 3s infinite;
         }
-        
+
         @keyframes pop {
             0% {
                 transform: scale(0);
@@ -165,7 +205,7 @@
                 opacity: 0;
             }
         }
-        
+
         .infinity-light {
             position: absolute;
             bottom: 0;
@@ -175,12 +215,16 @@
             background: linear-gradient(90deg, transparent, rgba(100, 200, 255, 0.5), transparent);
             animation: light 3s linear infinite;
         }
-        
+
         @keyframes light {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
         }
-        
+
         .cube {
             position: absolute;
             top: 0;
@@ -190,12 +234,16 @@
             transform-style: preserve-3d;
             animation: rotate 20s infinite linear;
         }
-        
+
         @keyframes rotate {
-            0% { transform: rotateX(0deg) rotateY(0deg); }
-            100% { transform: rotateX(360deg) rotateY(360deg); }
+            0% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
         }
-        
+
         .face {
             position: absolute;
             width: 200px;
@@ -224,13 +272,22 @@
         }
     </style>
 </head>
+
 <body oncontextmenu="return false;">
+    <!-- ============================== -->
     <!-- Navigation Bar -->
+    <!-- ============================== -->
     <nav class="fixed top-0 left-0 w-full z-50 bg-gray-900 bg-opacity-90">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="text-white text-2xl font-bold">INFOPEDIA</div>
+            <!-- Mobile Hamburger -->
             <div class="md:hidden">
-                <button id="menu-toggle" class="text-white focus:outline-none">
+                <button
+                    id="menu-toggle"
+                    type="button"
+                    class="text-white focus:outline-none"
+                    aria-label="Open navigation menu"
+                >
                     <div class="w-8 space-y-2 hamburger">
                         <div class="h-0.5 w-8 bg-white transform transition duration-300"></div>
                         <div class="h-0.5 w-8 bg-white transform transition duration-300"></div>
@@ -238,39 +295,68 @@
                     </div>
                 </button>
             </div>
-            <div id="menu-items" class="hidden md:flex space-x-8">
-                <a href="#about" class="text-white hover:text-blue-400 transition">About</a>
-                <a href="#expertise" class="text-white hover:text-blue-400 transition">Expertise</a>
-                <a href="#join" class="text-white hover:text-blue-400 transition">Join Us</a>
-                <a href="#contact" class="text-white hover:text-blue-400 transition">Contact</a>
-                <a href="#meeting" class="text-white hover:text-blue-400 transition">Meeting</a>
+            <!-- Navigation -->
+            <div
+                id="menu-items"
+                class="hidden md:flex md:items-center md:space-x-8"
+            >
+                <a href="#about" class="text-white hover:underline">About</a>
+                <a href="#expertise" class="text-white hover:underline">Expertise</a>
+                <a href="#join" class="text-white hover:underline">Join Us</a>
+                <a href="#contact" class="text-white hover:underline">Contact</a>
+                <a href="#meeting" class="text-white hover:underline">Meeting</a>
             </div>
         </div>
     </nav>
 
+    <!-- ============================== -->
+    <!-- Hero -->
+    <!-- ============================== -->
     <div id="vanta-bg" class="vanta-bg flex items-center justify-center">
-        <!-- 3D Background using Vanta.js -->
         <div class="text-center p-8">
-            <h1 class="text-6xl font-bold mb-6 floating" style="text-shadow: 0 0 20px rgba(100, 200, 255, 0.8);">INFOPEDIA</h1>
-            <p class="text-2xl mb-8" style="text-shadow: 0 0 10px rgba(100, 200, 255, 0.8);">Connecting People Through Knowledge</p>
-            <button onclick="scrollToSection('about')" class="bg-gradient-to-r from-blue-500 to-teal-400 text-white px-8 py-3 rounded-full font-medium hover:scale-105 transition-transform">
+            <h1
+                class="text-6xl font-bold mb-6 floating"
+                style="text-shadow: 0 0 20px rgba(100, 200, 255, 0.8);"
+            >
+                INFOPEDIA
+            </h1>
+            <p
+                class="text-2xl mb-8"
+                style="text-shadow: 0 0 10px rgba(100, 200, 255, 0.8);"
+            >
+                Connecting People Through Knowledge
+            </p>
+            <button
+                type="button"
+                onclick="scrollToSection('about')"
+                class="bg-gradient-to-r from-blue-500 to-teal-400 text-white px-8 py-3 rounded-full font-medium hover:scale-105 transition-transform"
+            >
                 Explore More
             </button>
         </div>
         <div class="infinity-light"></div>
     </div>
 
-    <!-- About Section -->
-    <div id="about" class="section bg-gradient-to-br from-gray-900 to-gray-800 flex items-center">
+    <!-- ============================== -->
+    <!-- About -->
+    <!-- ============================== -->
+    <div
+        id="about"
+        class="section bg-gradient-to-br from-gray-900 to-gray-800 flex items-center"
+    >
         <div class="container mx-auto">
             <div class="card max-w-4xl mx-auto">
                 <h2 class="text-4xl font-bold mb-6 text-center">About Infopedia</h2>
                 <p class="text-lg mb-6 text-center">
-                    Infopedia is a revolutionary platform connecting people through shared knowledge and expertise. 
+                    Infopedia is a revolutionary platform connecting people through shared knowledge and expertise.
                     Our mission is to bridge gaps between professionals and create a network of shared wisdom.
                 </p>
                 <div class="flex justify-center">
-                    <button onclick="scrollToSection('expertise')" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full font-medium hover:scale-105 transition-transform">
+                    <button
+                        type="button"
+                        onclick="scrollToSection('expertise')"
+                        class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full font-medium hover:scale-105 transition-transform"
+                    >
                         View Your Expertise
                     </button>
                 </div>
@@ -278,77 +364,162 @@
         </div>
     </div>
 
-    <!-- Expertise Section -->
-    <div id="expertise" class="section bg-gradient-to-br from-gray-800 to-gray-900">
+    <!-- ============================== -->
+    <!-- Expertise -->
+    <!-- ============================== -->
+    <div
+        id="expertise"
+        class="section bg-gradient-to-br from-gray-800 to-gray-900"
+    >
         <div class="container mx-auto">
             <h2 class="text-4xl font-bold mb-12 text-center">Your Expertise Should be in</h2>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Video Editing Expertise -->
+                <!-- Video Editing -->
                 <div class="card">
                     <h3 class="text-2xl font-semibold mb-4">Video Editing</h3>
-                    <p class="mb-4">professional editors can transform your raw footage into stunning visual stories for doing advertisement for our company.</p>
+                    <p class="mb-4">
+                        professional editors can transform your raw footage into stunning visual stories for doing advertisement for our company.
+                    </p>
                     <div class="video-container">
-                        <iframe src="https://cdn.pixabay.com/video/2023/11/21/189998-887067364_tiny.mp4?autoplay=1&mute=1&loop=1&playlist=dQw4w9WgXcQ&controls=0&disablekb=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <video
+                            class="auto-video"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="auto"
+                            disablepictureinpicture
+                            controlslist="nodownload noplaybackrate noremoteplayback"
+                        >
+                            <source src="https://www.pexels.com/download/video/19205438/" type="video/mp4" />
+                        </video>
                     </div>
                 </div>
-                
-                <!-- Consulting Expertise -->
+                <!-- Consulting -->
                 <div class="card">
                     <h3 class="text-2xl font-semibold mb-4">Consulting</h3>
-                    <p class="mb-4">Strategic advice from industry experts to help you navigate complex challenges.</p>
+                    <p class="mb-4">
+                        Strategic advice from industry experts to help you navigate complex challenges.
+                    </p>
                     <div class="video-container">
-                        <iframe src="https://cdn.pixabay.com/video/2024/05/08/211200_tiny.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <video
+                            class="auto-video"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="auto"
+                            disablepictureinpicture
+                            controlslist="nodownload noplaybackrate noremoteplayback"
+                        >
+                            <source src="https://cdn.pixabay.com/video/2024/05/08/211200_tiny.mp4" type="video/mp4" />
+                        </video>
                     </div>
                 </div>
-                
-                <!-- Web Development Expertise -->
+                <!-- Web Development -->
                 <div class="card">
                     <h3 class="text-2xl font-semibold mb-4">Web Development</h3>
-                    <p class="mb-4">Cutting-edge websites and applications tailored to your business needs.</p>
+                    <p class="mb-4">
+                        Cutting-edge websites and applications tailored to your business needs.
+                    </p>
                     <div class="video-container">
-                        <iframe src="https://cdn.pixabay.com/video/2015/12/11/1625-148614367_tiny.mp4" allowfullscreen></iframe>
+                        <video
+                            class="auto-video"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="auto"
+                            disablepictureinpicture
+                            controlslist="nodownload noplaybackrate noremoteplayback"
+                        >
+                            <source src="https://cdn.pixabay.com/video/2015/12/11/1625-148614367_tiny.mp4" type="video/mp4" />
+                        </video>
                     </div>
                 </div>
-                
-                <!-- Science Expertise -->
+                <!-- Science -->
                 <div class="card">
-                    <h3 class="text-2xl font-semibold mb-4">Science & Research</h3>
-                    <p class="mb-4">Translating complex scientific concepts into actionable insights.</p>
+                    <h3 class="text-2xl font-semibold mb-4">Science &amp; Research</h3>
+                    <p class="mb-4">
+                        Translating complex scientific concepts into actionable insights.
+                    </p>
                     <div class="video-container">
-                        <iframe src="https://cdn.pixabay.com/video/2016/09/21/5373-183629075_tiny.mp4" allowfullscreen></iframe>
+                        <video
+                            class="auto-video"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="auto"
+                            disablepictureinpicture
+                            controlslist="nodownload noplaybackrate noremoteplayback"
+                        >
+                            <source src="https://cdn.pixabay.com/video/2016/09/21/5373-183629075_tiny.mp4" type="video/mp4" />
+                        </video>
                     </div>
                 </div>
-                
-                <!-- Problem Solving Expertise -->
+                <!-- Problem Solving -->
                 <div class="card">
                     <h3 class="text-2xl font-semibold mb-4">Problem Solving</h3>
-                    <p class="mb-4">Systematic approaches to tackle your toughest business challenges.</p>
+                    <p class="mb-4">
+                        Systematic approaches to tackle your toughest business challenges.
+                    </p>
                     <div class="video-container">
-                        <iframe src="https://cdn.pixabay.com/video/2023/05/05/161739-824152752_tiny.mp4" allowfullscreen></iframe>
+                        <video
+                            class="auto-video"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="auto"
+                            disablepictureinpicture
+                            controlslist="nodownload noplaybackrate noremoteplayback"
+                        >
+                            <source src="https://cdn.pixabay.com/video/2023/05/05/161739-824152752_tiny.mp4" type="video/mp4" />
+                        </video>
                     </div>
                 </div>
-                
-                <!-- Marketing Expertise -->
+                <!-- Marketing -->
                 <div class="card">
                     <h3 class="text-2xl font-semibold mb-4">Marketing</h3>
-                    <p class="mb-4">Creative strategies to amplify your brand and reach your target audience.</p>
+                    <p class="mb-4">
+                        Creative strategies to amplify your brand and reach your target audience.
+                    </p>
                     <div class="video-container">
-                        <iframe src="https://cdn.pixabay.com/video/2024/12/24/248449_large.mp4" allowfullscreen></iframe>
+                        <video
+                            class="auto-video"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="auto"
+                            disablepictureinpicture
+                            controlslist="nodownload noplaybackrate noremoteplayback"
+                        >
+                            <source src="https://cdn.pixabay.com/video/2024/12/24/248449_large.mp4" type="video/mp4" />
+                        </video>
                     </div>
                 </div>
             </div>
-            
             <div class="flex justify-center mt-10">
-                <button onclick="scrollToSection('join')" class="bg-gradient-to-r from-blue-400 to-purple-500 text-white px-6 py-2 rounded-full font-medium hover:scale-105 transition-transform">
+                <button
+                    type="button"
+                    onclick="scrollToSection('join')"
+                    class="bg-gradient-to-r from-blue-400 to-purple-500 text-white px-6 py-2 rounded-full font-medium hover:scale-105 transition-transform"
+                >
                     Join Our Community
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Join Community Section -->
-    <div id="join" class="section bg-gradient-to-br from-gray-900 to-gray-800 flex items-center">
+    <!-- ============================== -->
+    <!-- Join Community -->
+    <!-- ============================== -->
+    <div
+        id="join"
+        class="section bg-gradient-to-br from-gray-900 to-gray-800 flex items-center"
+    >
         <div class="container mx-auto">
             <div class="card max-w-4xl mx-auto">
                 <h2 class="text-4xl font-bold mb-6 text-center">Join Our Community</h2>
@@ -356,16 +527,23 @@
                     Become part of the Infopedia network and connect with professionals from various fields.
                 </p>
                 <div class="w-full h-[700px] sm:h-[800px] lg:h-[1000px] overflow-auto">
-                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeDPXEuTY8Zal7MgQFVy62b_uassD8snzBAqxlDyYtChLchpg/viewform?embedded=true"
-                            frameborder="0"
-                            class="w-full h-full min-h-[1200px]"
-                            marginheight="0"
-                            marginwidth="0">
+                    <iframe
+                        src="https://docs.google.com/forms/d/e/1FAIpQLSeDPXEuTY8Zal7MgQFVy62b_uassD8snzBAqxlDyYtChLchpg/viewform?embedded=true"
+                        frameborder="0"
+                        class="w-full h-full min-h-[1200px]"
+                        marginheight="0"
+                        marginwidth="0"
+                        title="Join Infopedia"
+                    >
                         Loading...
                     </iframe>
                 </div>
                 <div class="flex justify-center mt-6">
-                    <button onclick="scrollToSection('contact')" class="bg-gradient-to-r from-green-400 to-blue-500 text-white px-6 py-2 rounded-full font-medium hover:scale-105 transition-transform">
+                    <button
+                        type="button"
+                        onclick="scrollToSection('contact')"
+                        class="bg-gradient-to-r from-green-400 to-blue-500 text-white px-6 py-2 rounded-full font-medium hover:scale-105 transition-transform"
+                    >
                         Contact Us
                     </button>
                 </div>
@@ -373,39 +551,67 @@
         </div>
     </div>
 
-    <!-- Contact Section -->
-    <div id="contact" class="section bg-gradient-to-br from-gray-800 to-gray-900 flex items-center">
+    <!-- ============================== -->
+    <!-- Contact -->
+    <!-- ============================== -->
+    <div
+        id="contact"
+        class="section bg-gradient-to-br from-gray-800 to-gray-900 flex items-center"
+    >
         <div class="container mx-auto">
             <div class="card max-w-2xl mx-auto">
                 <h2 class="text-4xl font-bold mb-6 text-center">Contact Us</h2>
-                
                 <div id="contactAlert" class="alert-message"></div>
-                
-                <form id="contactForm" class="space-y-4" onsubmit="return handleContactSubmit(event)">
+                <form
+                    id="contactForm"
+                    class="space-y-4"
+                    onsubmit="return handleContactSubmit(event)"
+                >
                     <div>
                         <label for="contact-name" class="block mb-2">Name</label>
-                        <input type="text" id="contact-name" required class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your name">
+                        <input
+                            type="text"
+                            id="contact-name"
+                            required
+                            class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Your name"
+                        />
                     </div>
-                    
                     <div>
                         <label for="contact-email" class="block mb-2">Email</label>
-                        <input type="email" id="contact-email" required class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com">
+                        <input
+                            type="email"
+                            id="contact-email"
+                            required
+                            class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="your@email.com"
+                        />
                     </div>
-                    
                     <div>
                         <label for="contact-message" class="block mb-2">Message</label>
-                        <textarea id="contact-message" rows="4" required class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your message..."></textarea>
+                        <textarea
+                            id="contact-message"
+                            rows="4"
+                            required
+                            class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Your message..."
+                        ></textarea>
                     </div>
-                    
                     <div class="pt-4">
-                        <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-green-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                        <button
+                            type="submit"
+                            class="w-full bg-gradient-to-r from-blue-500 to-green-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+                        >
                             Send Message
                         </button>
                     </div>
                 </form>
-                
                 <div class="flex justify-center mt-6">
-                    <button onclick="scrollToSection('meeting')" class="bg-gradient-to-r from-purple-400 to-pink-500 text-white px-6 py-2 rounded-full font-medium hover:scale-105 transition-transform">
+                    <button
+                        type="button"
+                        onclick="scrollToSection('meeting')"
+                        class="bg-gradient-to-r from-purple-400 to-pink-500 text-white px-6 py-2 rounded-full font-medium hover:scale-105 transition-transform"
+                    >
                         Schedule Meeting
                     </button>
                 </div>
@@ -413,267 +619,287 @@
         </div>
     </div>
 
-    <!-- Meeting Section -->
-    <div id="meeting" class="section bg-gradient-to-br from-gray-900 to-gray-800 flex items-center">
+    <!-- ============================== -->
+    <!-- Meeting -->
+    <!-- ============================== -->
+    <div
+        id="meeting"
+        class="section bg-gradient-to-br from-gray-900 to-gray-800 flex items-center"
+    >
         <div class="container mx-auto">
             <div class="card max-w-4xl mx-auto">
                 <h2 class="text-4xl font-bold mb-6 text-center">Schedule a Meeting</h2>
                 <p class="text-lg mb-6 text-center">
                     Book a time that works for you to discuss your project with our experts.
                 </p>
-                
                 <div id="meetingAlert" class="alert-message"></div>
-                
-                <form id="meetingForm" class="space-y-4" onsubmit="return handleMeetingSubmit(event)">
+                <form
+                    id="meetingForm"
+                    class="space-y-4"
+                    onsubmit="return handleMeetingSubmit(event)"
+                >
                     <div>
                         <label for="meeting-name" class="block mb-2">Your Name</label>
-                        <input type="text" id="meeting-name" required class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your name">
+                        <input
+                            type="text"
+                            id="meeting-name"
+                            required
+                            class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Your name"
+                        />
                     </div>
-
                     <div>
                         <label for="meeting-email" class="block mb-2">Your Email</label>
-                        <input type="email" id="meeting-email" required class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com">
+                        <input
+                            type="email"
+                            id="meeting-email"
+                            required
+                            class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="your@email.com"
+                        />
                     </div>
-                    
                     <div>
                         <label for="meeting-date" class="block mb-2">Select a date</label>
-                        <input type="date" id="meeting-date" required class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input
+                            type="date"
+                            id="meeting-date"
+                            required
+                            class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
                     </div>
-                    
                     <div>
                         <label for="meeting-time" class="block mb-2">Select a time</label>
-                        <input type="time" id="meeting-time" required class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input
+                            type="time"
+                            id="meeting-time"
+                            required
+                            class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
                     </div>
-
                     <div>
                         <label for="meeting-subject" class="block mb-2">Meeting Subject</label>
-                        <input type="text" id="meeting-subject" required class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="What is this meeting about?">
+                        <input
+                            type="text"
+                            id="meeting-subject"
+                            required
+                            class="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="What is this meeting about?"
+                        />
                     </div>
-                    
                     <div class="pt-4">
-                        <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 rounded-lg font-medium hover:bg-purple-600 transition-colors">
+                        <button
+                            type="submit"
+                            class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 rounded-lg font-medium hover:bg-purple-600 transition-colors"
+                        >
                             Confirm Meeting
                         </button>
                     </div>
                 </form>
-                
+                <!-- Meeting Video -->
                 <div class="video-container mt-10">
-                    <iframe src="https://cdn.pixabay.com/video/2025/04/23/273922_tiny.mp4" allowfullscreen></iframe>
+                    <video
+                        class="auto-video"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="auto"
+                        disablepictureinpicture
+                        controlslist="nodownload noplaybackrate noremoteplayback"
+                    >
+                        <source src="https://cdn.pixabay.com/video/2025/04/23/273922_tiny.mp4" type="video/mp4" />
+                    </video>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- ============================== -->
     <!-- Footer -->
+    <!-- ============================== -->
     <footer class="bg-gray-900 py-8 relative">
         <div class="container mx-auto px-4 text-center">
             <h3 class="text-2xl font-bold mb-4">INFOPEDIA</h3>
             <p class="mb-6">Connecting People Through Knowledge and Expertise</p>
             <div class="flex justify-center space-x-4 mb-6">
-                <a href="#" class="text-blue-400 hover:text-blue-300">Twitter</a>
-                <a href="#" class="text-blue-600 hover:text-blue-400">LinkedIn</a>
-                <a href="#" class="text-pink-500 hover:text-pink-400">Instagram</a>
-                <a href="#" class="text-gray-300 hover:text-white">YouTube</a>
+                <a href="#" class="text-white hover:underline">Twitter</a>
+                <a href="#" class="text-white hover:underline">LinkedIn</a>
+                <a href="#" class="text-white hover:underline">Instagram</a>
+                <a href="#" class="text-white hover:underline">YouTube</a>
             </div>
             <p class="text-gray-400 text-sm">© 2023 Infopedia. All rights reserved.</p>
         </div>
         <div class="infinity-light"></div>
     </footer>
 
+    <!-- ============================== -->
+    <!-- JavaScript -->
+    <!-- ============================== -->
     <script>
         // Navigation Toggle
-        document.getElementById('menu-toggle').addEventListener('click', function() {
-            const menu = document.getElementById('menu-items');
-            const hamburger = document.querySelector('.hamburger');
-            menu.classList.toggle('active');
-            hamburger.classList.toggle('open');
-        });
-
-        // Close menu when clicking on mobile links
-        document.querySelectorAll('#menu-items a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    document.getElementById('menu-items').classList.remove('active');
-                    document.querySelector('.hamburger').classList.remove('open');
-                }
+        document
+            .getElementById('menu-toggle')
+            .addEventListener('click', function () {
+                const menu = document.getElementById('menu-items');
+                const hamburger = document.querySelector('.hamburger');
+                menu.classList.toggle('active');
+                hamburger.classList.toggle('open');
             });
-        });
 
-        // Initialize Vanta.js background
+        // Close mobile navigation after clicking a link
+        document
+            .querySelectorAll('#menu-items a')
+            .forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 768) {
+                        document
+                            .getElementById('menu-items')
+                            .classList.remove('active');
+                        document
+                            .querySelector('.hamburger')
+                            .classList.remove('open');
+                    }
+                });
+            });
+
+        // Initialize Vanta.js
         VANTA.NET({
             el: "#vanta-bg",
             mouseControls: true,
             touchControls: true,
             gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
+            minHeight: 200.0,
+            minWidth: 200.0,
+            scale: 1.0,
+            scaleMobile: 1.0,
             color: 0x3a7bd5,
             backgroundColor: 0x111,
-            points: 12.00,
-            maxDistance: 23.00,
-            spacing: 19.00
+            points: 12.0,
+            maxDistance: 23.0,
+            spacing: 19.0
         });
 
-        // Smooth scrolling to sections
+        // Smooth scrolling
         function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            const section = document.getElementById(id);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
-        // Create popping text effect
+        // Create popping effect
         function createPops() {
             const colors = ['#4facfe', '#00f2fe', '#fe00d4', '#00fe95'];
             const pops = document.createElement('div');
             pops.className = 'pops';
-            
-            // Random position in visible viewport
+
             const xPos = Math.random() * window.innerWidth;
             const yPos = Math.random() * window.innerHeight;
-            
-            // Random size
             const size = Math.random() * 100 + 50;
-            
-            // Random color
             const color = colors[Math.floor(Math.random() * colors.length)];
-            
+
             pops.style.left = `${xPos}px`;
             pops.style.top = `${yPos}px`;
             pops.style.width = `${size}px`;
             pops.style.height = `${size}px`;
             pops.style.background = color;
-            
+
             document.body.appendChild(pops);
-            
-            // Remove after animation completes
             setTimeout(() => {
                 pops.remove();
             }, 3000);
         }
-
-        // Add popping effect randomly
         setInterval(createPops, 800);
 
-        // Show alert message
+        // Show alert
         function showAlert(elementId, message, isSuccess) {
             const alertElement = document.getElementById(elementId);
             alertElement.textContent = message;
-            alertElement.className = `alert-message ${isSuccess ? 'alert-success' : 'alert-error'}`;
+            alertElement.className = `alert-message ${
+                isSuccess ? 'alert-success' : 'alert-error'
+            }`;
             alertElement.style.display = 'block';
-            
             setTimeout(() => {
                 alertElement.style.display = 'none';
             }, 5000);
         }
 
-        // Handle Contact Form Submission
+        // Contact Form
         function handleContactSubmit(event) {
             event.preventDefault();
-            
             const name = document.getElementById('contact-name').value;
             const email = document.getElementById('contact-email').value;
             const message = document.getElementById('contact-message').value;
-            
-            // Show loading state
+
             showAlert('contactAlert', '📧 Sending your message...', true);
-            
-            // Build URL with query parameters
-            const params = new URLSearchParams();
-            params.append('entry.2005620554', name);
-            params.append('entry.1045781291', email);
-            params.append('entry.463370691', message);
-            
-            // Use image pixel approach (most reliable for CORS)
-            const img = new Image();
-            img.src = 'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse?' + params.toString();
-            
-            img.onload = function() {
-                showAlert('contactAlert', '✓ Message sent successfully! We will contact you soon.', true);
-                document.getElementById('contactForm').reset();
-            };
-            
-            img.onerror = function() {
-                showAlert('contactAlert', '✓ Message sent successfully! We will contact you soon.', true);
-                document.getElementById('contactForm').reset();
-            };
-            
+
+            const formData = new FormData();
+            formData.append('entry.2005620554', name);
+            formData.append('entry.1045781291', email);
+            formData.append('entry.463370691', message);
+
+            fetch(
+                'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse',
+                { method: 'POST', mode: 'no-cors', body: formData }
+            );
+
+            showAlert(
+                'contactAlert',
+                '✅ Message sent successfully! We will contact you soon.',
+                true
+            );
+
+            document.getElementById('contactForm').reset();
             return false;
         }
 
-       // Handle Contact Form Submission
-function handleContactSubmit(event) {
-    event.preventDefault();
+        // Meeting Form
+        function handleMeetingSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('meeting-name').value;
+            const email = document.getElementById('meeting-email').value;
+            const date = document.getElementById('meeting-date').value;
+            const time = document.getElementById('meeting-time').value;
+            const subject = document.getElementById('meeting-subject').value;
 
-    const name = document.getElementById('contact-name').value;
-    const email = document.getElementById('contact-email').value;
-    const message = document.getElementById('contact-message').value;
+            showAlert('meetingAlert', '📅 Scheduling your meeting...', true);
 
-    showAlert('contactAlert', '📧 Sending your message...', true);
+            const formData = new FormData();
+            formData.append('entry.2005620554', name);
+            formData.append('entry.1045781291', email);
+            formData.append('entry.463370691', subject);
+            formData.append('entry.839337160', date);
+            formData.append('entry.1817815136', time);
 
-    const formData = new FormData();
-    formData.append('entry.2005620554', name);
-    formData.append('entry.1045781291', email);
-    formData.append('entry.463370691', message);
+            fetch(
+                'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse',
+                { method: 'POST', mode: 'no-cors', body: formData }
+            );
 
-    fetch(
-        'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse',
-        {
-            method: 'POST',
-            mode: 'no-cors',
-            body: formData
+            showAlert(
+                'meetingAlert',
+                `✅ Meeting scheduled for ${date} at ${time}. We will contact you soon.`,
+                true
+            );
+
+            document.getElementById('meetingForm').reset();
+            return false;
         }
-    );
 
-    showAlert(
-        'contactAlert',
-        '✅ Message sent successfully! We will contact you soon.',
-        true
-    );
-
-    document.getElementById('contactForm').reset();
-
-    return false;
-}
-
-
-// Handle Meeting Form Submission
-function handleMeetingSubmit(event) {
-    event.preventDefault();
-
-    const name = document.getElementById('meeting-name').value;
-    const email = document.getElementById('meeting-email').value;
-    const date = document.getElementById('meeting-date').value;
-    const time = document.getElementById('meeting-time').value;
-    const subject = document.getElementById('meeting-subject').value;
-
-    showAlert('meetingAlert', '📅 Scheduling your meeting...', true);
-
-    const formData = new FormData();
-    formData.append('entry.2005620554', name);
-    formData.append('entry.1045781291', email);
-    formData.append('entry.463370691', subject);
-    formData.append('entry.839337160', date);
-    formData.append('entry.1817815136', time);
-
-    fetch(
-        'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse',
-        {
-            method: 'POST',
-            mode: 'no-cors',
-            body: formData
-        }
-    );
-
-    showAlert(
-        'meetingAlert',
-        `✅ Meeting scheduled for ${date} at ${time}. We will contact you soon.`,
-        true
-    );
-
-    document.getElementById('meetingForm').reset();
-
-    return false;
-}
+        // Keep all videos muted and looping
+        document.querySelectorAll('.auto-video').forEach((video) => {
+            video.muted = true;
+            video.defaultMuted = true;
+            video.loop = true;
+            video.playsInline = true;
+            video.addEventListener('canplay', () => {
+                video.play().catch(() => {});
+            });
+            video.addEventListener('ended', () => {
+                video.currentTime = 0;
+                video.play().catch(() => {});
+            });
+        });
     </script>
 </body>
 </html>
