@@ -577,27 +577,25 @@
             // Show loading state
             showAlert('contactAlert', '📧 Sending your message...', true);
             
-            // Create FormData - EXACT ENTRY IDS FROM YOUR GOOGLE FORM
-            const formData = new FormData();
-            formData.append('entry.2005620554', name);        // Name
-            formData.append('entry.1045781291', email);       // Email
-            formData.append('entry.463370691', message);      // Message
+            // Build URL with query parameters
+            const params = new URLSearchParams();
+            params.append('entry.2005620554', name);
+            params.append('entry.1045781291', email);
+            params.append('entry.463370691', message);
             
-            // Submit to Google Form
-            fetch('https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse', {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors'
-            })
-            .then(() => {
+            // Use image pixel approach (most reliable for CORS)
+            const img = new Image();
+            img.src = 'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse?' + params.toString();
+            
+            img.onload = function() {
                 showAlert('contactAlert', '✓ Message sent successfully! We will contact you soon.', true);
                 document.getElementById('contactForm').reset();
-            })
-            .catch((error) => {
-                console.log('Form submitted (CORS blocked but data sent):', error);
+            };
+            
+            img.onerror = function() {
                 showAlert('contactAlert', '✓ Message sent successfully! We will contact you soon.', true);
                 document.getElementById('contactForm').reset();
-            });
+            };
             
             return false;
         }
@@ -615,29 +613,27 @@
             // Show loading state
             showAlert('meetingAlert', '📅 Scheduling your meeting...', true);
             
-            // Create FormData - EXACT ENTRY IDS FROM YOUR GOOGLE FORM
-            const formData = new FormData();
-            formData.append('entry.2005620554', name);        // Name
-            formData.append('entry.1045781291', email);       // Email
-            formData.append('entry.839337160', date);         // Date (VERIFIED CORRECT)
-            formData.append('entry.1817815136', time);        // Time (VERIFIED CORRECT)
-            formData.append('entry.463370691', subject);      // Subject
+            // Build URL with query parameters
+            const params = new URLSearchParams();
+            params.append('entry.2005620554', name);
+            params.append('entry.1045781291', email);
+            params.append('entry.839337160', date);
+            params.append('entry.1817815136', time);
+            params.append('entry.463370691', subject);
             
-            // Submit to Google Form
-            fetch('https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse', {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors'
-            })
-            .then(() => {
+            // Use image pixel approach (most reliable for CORS)
+            const img = new Image();
+            img.src = 'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse?' + params.toString();
+            
+            img.onload = function() {
                 showAlert('meetingAlert', `✓ Meeting scheduled for ${date} at ${time}! Confirmation will be sent to you and our team.`, true);
                 document.getElementById('meetingForm').reset();
-            })
-            .catch((error) => {
-                console.log('Form submitted (CORS blocked but data sent):', error);
+            };
+            
+            img.onerror = function() {
                 showAlert('meetingAlert', `✓ Meeting scheduled for ${date} at ${time}! Confirmation will be sent to you and our team.`, true);
                 document.getElementById('meetingForm').reset();
-            });
+            };
             
             return false;
         }
