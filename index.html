@@ -600,43 +600,80 @@
             return false;
         }
 
-        // Handle Meeting Form Submission
-        function handleMeetingSubmit(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('meeting-name').value;
-            const email = document.getElementById('meeting-email').value;
-            const date = document.getElementById('meeting-date').value;
-            const time = document.getElementById('meeting-time').value;
-            const subject = document.getElementById('meeting-subject').value;
-            
-            // Show loading state
-            showAlert('meetingAlert', '📅 Scheduling your meeting...', true);
-            
-            // Build URL with query parameters
-            const params = new URLSearchParams();
-            params.append('entry.2005620554', name);
-            params.append('entry.1045781291', email);
-            params.append('entry.839337160', date);
-            params.append('entry.1817815136', time);
-            params.append('entry.463370691', subject);
-            
-            // Use image pixel approach (most reliable for CORS)
-            const img = new Image();
-            img.src = 'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse?' + params.toString();
-            
-            img.onload = function() {
-                showAlert('meetingAlert', `✓ Meeting scheduled for ${date} at ${time}! Confirmation will be sent to you and our team.`, true);
-                document.getElementById('meetingForm').reset();
-            };
-            
-            img.onerror = function() {
-                showAlert('meetingAlert', `✓ Meeting scheduled for ${date} at ${time}! Confirmation will be sent to you and our team.`, true);
-                document.getElementById('meetingForm').reset();
-            };
-            
-            return false;
+       // Handle Contact Form Submission
+function handleContactSubmit(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const message = document.getElementById('contact-message').value;
+
+    showAlert('contactAlert', '📧 Sending your message...', true);
+
+    const formData = new FormData();
+    formData.append('entry.2005620554', name);
+    formData.append('entry.1045781291', email);
+    formData.append('entry.463370691', message);
+
+    fetch(
+        'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse',
+        {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formData
         }
+    );
+
+    showAlert(
+        'contactAlert',
+        '✅ Message sent successfully! We will contact you soon.',
+        true
+    );
+
+    document.getElementById('contactForm').reset();
+
+    return false;
+}
+
+
+// Handle Meeting Form Submission
+function handleMeetingSubmit(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('meeting-name').value;
+    const email = document.getElementById('meeting-email').value;
+    const date = document.getElementById('meeting-date').value;
+    const time = document.getElementById('meeting-time').value;
+    const subject = document.getElementById('meeting-subject').value;
+
+    showAlert('meetingAlert', '📅 Scheduling your meeting...', true);
+
+    const formData = new FormData();
+    formData.append('entry.2005620554', name);
+    formData.append('entry.1045781291', email);
+    formData.append('entry.463370691', subject);
+    formData.append('entry.839337160', date);
+    formData.append('entry.1817815136', time);
+
+    fetch(
+        'https://docs.google.com/forms/d/e/1FAIpQLSej1WSHVUd0-wFTY2DKCdoFjHgfErnKM2z5FXulIfcEShR9DQ/formResponse',
+        {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formData
+        }
+    );
+
+    showAlert(
+        'meetingAlert',
+        `✅ Meeting scheduled for ${date} at ${time}. We will contact you soon.`,
+        true
+    );
+
+    document.getElementById('meetingForm').reset();
+
+    return false;
+}
     </script>
 </body>
 </html>
