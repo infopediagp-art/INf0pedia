@@ -80,11 +80,6 @@
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s, box-shadow 0.3s;
-            /* isolates this element's blur/paint so the browser doesn't
-               recompute it against the rest of the page on every scroll
-               frame - same look, much less repaint work */
-            contain: layout style paint;
-            transform: translateZ(0);
         }
 
         .card:hover {
@@ -198,8 +193,6 @@
             opacity: 0;
             pointer-events: none;
             animation: pop 3s infinite;
-            contain: layout style paint;
-            will-change: transform, opacity;
         }
 
         @keyframes pop {
@@ -394,7 +387,7 @@
                             muted
                             loop
                             playsinline
-                            preload="metadata"
+                            preload="auto"
                             disablepictureinpicture
                             controlslist="nodownload noplaybackrate noremoteplayback"
                         >
@@ -415,7 +408,7 @@
                             muted
                             loop
                             playsinline
-                            preload="metadata"
+                            preload="auto"
                             disablepictureinpicture
                             controlslist="nodownload noplaybackrate noremoteplayback"
                         >
@@ -436,7 +429,7 @@
                             muted
                             loop
                             playsinline
-                            preload="metadata"
+                            preload="auto"
                             disablepictureinpicture
                             controlslist="nodownload noplaybackrate noremoteplayback"
                         >
@@ -457,7 +450,7 @@
                             muted
                             loop
                             playsinline
-                            preload="metadata"
+                            preload="auto"
                             disablepictureinpicture
                             controlslist="nodownload noplaybackrate noremoteplayback"
                         >
@@ -478,7 +471,7 @@
                             muted
                             loop
                             playsinline
-                            preload="metadata"
+                            preload="auto"
                             disablepictureinpicture
                             controlslist="nodownload noplaybackrate noremoteplayback"
                         >
@@ -499,7 +492,7 @@
                             muted
                             loop
                             playsinline
-                            preload="metadata"
+                            preload="auto"
                             disablepictureinpicture
                             controlslist="nodownload noplaybackrate noremoteplayback"
                         >
@@ -710,7 +703,7 @@
                         muted
                         loop
                         playsinline
-                        preload="metadata"
+                        preload="auto"
                         disablepictureinpicture
                         controlslist="nodownload noplaybackrate noremoteplayback"
                     >
@@ -770,7 +763,7 @@
             });
 
         // Initialize Vanta.js
-        const vantaEffect = VANTA.NET({
+        VANTA.NET({
             el: "#vanta-bg",
             mouseControls: true,
             touchControls: true,
@@ -785,44 +778,6 @@
             maxDistance: 23.0,
             spacing: 19.0
         });
-
-        // Cap the internal render resolution to what the screen can
-        // actually show. Phones often report a devicePixelRatio of 3,
-        // which makes the WebGL renderer draw 9x more pixels per frame
-        // than a ratio of 1 for no visible difference - this just stops
-        // that waste, the effect looks the same.
-        if (vantaEffect && vantaEffect.renderer) {
-            vantaEffect.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-        }
-
-        // Pause the WebGL render loop when it isn't visible (tab in the
-        // background, or scrolled past) and resume the instant it's back
-        // in view - the animation is identical whenever you can see it,
-        // it just stops burning CPU/battery while you can't.
-        if (vantaEffect) {
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    vantaEffect.setOptions({ mouseControls: false, touchControls: false });
-                    if (vantaEffect.renderer) vantaEffect.pause?.();
-                } else {
-                    vantaEffect.resume?.();
-                }
-            });
-
-            const heroObserver = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            vantaEffect.resume?.();
-                        } else {
-                            vantaEffect.pause?.();
-                        }
-                    });
-                },
-                { threshold: 0 }
-            );
-            heroObserver.observe(document.getElementById('vanta-bg'));
-        }
 
         // Smooth scrolling
         function scrollToSection(id) {
@@ -854,14 +809,7 @@
                 pops.remove();
             }, 3000);
         }
-        let popsInterval = setInterval(createPops, 800);
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                clearInterval(popsInterval);
-            } else {
-                popsInterval = setInterval(createPops, 800);
-            }
-        });
+        setInterval(createPops, 800);
 
         // Show alert
         function showAlert(elementId, message, isSuccess) {
@@ -939,8 +887,7 @@
         }
 
         // Keep all videos muted and looping
-        const autoVideos = document.querySelectorAll('.auto-video');
-        autoVideos.forEach((video) => {
+        document.querySelectorAll('.auto-video').forEach((video) => {
             video.muted = true;
             video.defaultMuted = true;
             video.loop = true;
@@ -953,26 +900,6 @@
                 video.play().catch(() => {});
             });
         });
-
-        // With 7 videos decoding at once, phones choke even though only
-        // one or two are ever visible at a time. A large rootMargin means
-        // a video is already loaded and playing well before it scrolls
-        // into view, so nothing looks different - it just stops decoding
-        // videos that are far off-screen.
-        const videoObserver = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    const video = entry.target;
-                    if (entry.isIntersecting) {
-                        video.play().catch(() => {});
-                    } else {
-                        video.pause();
-                    }
-                });
-            },
-            { rootMargin: '600px 0px', threshold: 0 }
-        );
-        autoVideos.forEach((video) => videoObserver.observe(video));
     </script>
 </body>
 </html>
